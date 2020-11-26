@@ -1,15 +1,13 @@
-#%%
 # https://programmers.co.kr/learn/courses/30/lessons/12978
 import heapq
 from collections import defaultdict
-#%%
 def solution(N, road, K):
     roads = defaultdict(lambda : defaultdict(lambda : float('inf')))
 
     for start,end,weight in road:
-        curWeight = min(roads[start][end],weight)
-        roads[start][end] = min(curWeight,weight)
-        roads[end][start] = min(roads[end][start],weight)
+        prev = min(roads[start][end],weight)
+        roads[start][end] = min(prev,weight)
+        roads[end][start] = min(prev,weight)
 
     length = [float('inf')] * (N+1)
     length[1]  = 0 
@@ -23,7 +21,7 @@ def solution(N, road, K):
 
         length[cur] = w
 
-        for nextC, nW in roads[cur]:
+        for nextC, nW in roads[cur].items():
             nextWeight = nW + w
             if length[nextC] > nextWeight:
                 heapq.heappush(q,(nextWeight,nextC))
@@ -35,7 +33,3 @@ def solution(N, road, K):
     return answer
 # %%
 solution(5,[[1, 2, 1], [2, 3, 3], [5, 2, 2], [1, 4, 2], [5, 3, 1], [5, 4, 2]],3)
-
-# %%
-roads = defaultdict(lambda : defaultdict(lambda : float('inf')))
-# %%
